@@ -4,7 +4,7 @@ config();
 
 
 const openai = new OpenAI({
-    apiKey: "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",
+    apiKey: "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",
   });
 
 
