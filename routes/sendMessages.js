@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
     try {
-      const userInput = req.body.userInput;
+      const userInput = "Hola, recibis este mensjae?";
       const message = { role: "user", content: userInput };
       const result = await chatHelper(message);
       res.status(200).json(result);
