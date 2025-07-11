@@ -8,6 +8,7 @@ router.post("/", async (req, res) => {
       const userInput = "Hola, recibis este mensjae?";
       const message = { role: "user", content: userInput };
       const result = await chatHelper(message);
+        
       res.status(200).json(result);
     } catch (error) {
       console.error("Error processing request:", error);
