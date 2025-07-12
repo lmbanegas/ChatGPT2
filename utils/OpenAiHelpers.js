@@ -4,7 +4,7 @@ config();
 
 
 const openai = new OpenAI({
-    apiKey: "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",
+    apiKey: process.env.apiKey,
   });
 
 
