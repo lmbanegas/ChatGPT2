@@ -1,15 +1,30 @@
 import express from "express";
 import { chatHelper } from "../utils/OpenAiHelpers.js";
+import { marked } from "marked";
+
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.get("/", async (req, res) => {
+  res.render('chat')
+});
+
+
+router.post("/enviar", async (req, res) => {
+
     try {
-      const userInput = "Hola, recibis este mensjae?";
+
+      const userInput = req.body.texto2;
       const message = { role: "user", content: userInput };
       const result = await chatHelper(message);
+
+      result.content = marked(result.content);
+
         
-      res.status(200).json(result);
+
+
+      res.render('rta', {result})
+
     } catch (error) {
       console.error("Error processing request:", error);
       res.status(500).json({ error: "Error processing request" });
