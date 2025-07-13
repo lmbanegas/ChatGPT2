@@ -5,7 +5,6 @@ config();
 
 const openai = new OpenAI({
     apiKey: process.env.apiKey,
-
   });
 
 

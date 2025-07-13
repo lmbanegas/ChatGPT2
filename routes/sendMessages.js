@@ -23,7 +23,7 @@ router.post("/enviar", async (req, res) => {
         
 
 
-      res.render('rta', {result})
+      res.json({ content: result.content });
 
     } catch (error) {
       console.error("Error processing request:", error);

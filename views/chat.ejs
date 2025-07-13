@@ -1,18 +1,83 @@
-<html>
-    <head>
-        <title>res.render() Demo</title>
-    </head>
-    <body>
-        <h2>Welcome to GeeksforGeeks</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chat CGT</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-            <form action="sendText/enviar" method="post">
+    form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
 
+    input[type="text"] {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 300px;
+    }
 
-                    <input type="text" id="texto" name="texto2">
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-                    <button type="submit">Send </button>
+    #respuesta {
+      margin-top: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h2>Chat CGT</h2>
 
-            </form>
+  <form id="chatForm">
+    <input type="text" id="texto" name="texto2" placeholder="Escribe algo..." required />
+    
+    <button type="submit">Enviar</button>
+  </form>
 
-    </body>
+  <div id="respuesta">Esperando mensaje...</div>
+
+  <script>
+    document.getElementById('chatForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const texto = document.getElementById('texto').value;
+      const respuestaDiv = document.getElementById('respuesta');
+
+      try {
+        const res = await fetch('/sendText/enviar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ texto2: texto })
+        });
+
+        const data = await res.json();
+        respuestaDiv.innerHTML = data.content; // ya viene parseado con marked()
+      } catch (err) {
+        console.error(err);
+        respuestaDiv.innerText = "Error al obtener la respuesta.";
+      }
+    });
+  </script>
+</body>
 </html>
