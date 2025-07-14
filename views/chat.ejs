@@ -118,6 +118,8 @@
 
   <div id="loader" style="display: none;" class="loader"></div>
   <div id="error" style="display: none;">Error al realizar la consulta!</div>
+  <div id="Respuesta" style="display: none;">Respuesta</div>
+
 
 
   <script>
@@ -138,6 +140,8 @@
       const texto = document.getElementById('texto').value;
       const respuestaDiv = document.getElementById('loader');
       const error = document.getElementById('error');
+      const respuesta = document.getElementById('Respuesta');
+
 
 
       try {
@@ -149,7 +153,8 @@
         });
 
         const data = await res.json();
-        respuestaDiv.innerHTML = data.content;
+        respuesta.innerHTML = data.content;
+
       } catch (err) {
         respuestaDiv.style.display = 'none';
         error.style.display = 'block';
