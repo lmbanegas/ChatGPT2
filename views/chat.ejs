@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <title>Chat CGT</title>
@@ -15,8 +16,41 @@
 
     form {
       display: flex;
+      flex-direction: column;
+      align-items: center;
       gap: 10px;
       margin-bottom: 20px;
+    }
+
+    form textarea {
+      border: none;
+      outline: none;
+      border-bottom: 2px solid #AAA;
+      width: 100%;
+      display: block;
+      padding: 10px;
+      font-size: 14px;
+      line-height: 16px;
+      box-sizing: border-box;
+    }
+
+    form textarea {
+      font-family: inherit;
+      resize: none;
+      scrollbar-width: 0;
+      height: 38px;
+      width: 500px;
+
+      max-height: 300px;
+    }
+
+    form textarea::-webkit-scrollbar {
+      width: 0;
+    }
+
+    form input:focus,
+    form textarea:focus {
+      border-bottom-color: #178EC9;
     }
 
     input[type="text"] {
@@ -44,27 +78,70 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       white-space: pre-wrap;
     }
+
+    .loader {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
+
 <body>
+
+
+
   <h2>Chat CGT</h2>
 
   <form id="chatForm">
-    <input type="text" id="texto" name="texto2" placeholder="Escribe algo..." required />
-    
-    <button type="submit">Enviar</button>
+
+    <div>
+      <textarea id="texto" name="texto2" placeholder="Tu mensaje"></textarea>
+    </div>
+    <div>
+      <button type="submit">Enviar</button>
+    </div>
   </form>
 
-  <div id="respuesta">Esperando mensaje...</div>
+  <div id="loader" style="display: none;" class="loader"></div>
+  <div id="error" style="display: none;">Error al realizar la consulta!</div>
+
 
   <script>
+
+
+    const textarea = document.querySelector('textarea');
+
+    textarea.addEventListener("input", e => {
+      textarea.style.height = '38px';
+      textarea.style.height = (textarea.scrollHeight + 2) + 'px';
+    });
+
+
+
     document.getElementById('chatForm').addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const texto = document.getElementById('texto').value;
-      const respuestaDiv = document.getElementById('respuesta');
+      const respuestaDiv = document.getElementById('loader');
+      const error = document.getElementById('error');
+
 
       try {
+        respuestaDiv.style.display = 'block';
         const res = await fetch('/sendText/enviar', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -72,12 +149,15 @@
         });
 
         const data = await res.json();
-        respuestaDiv.innerHTML = data.content; // ya viene parseado con marked()
+        respuestaDiv.innerHTML = data.content;
       } catch (err) {
+        respuestaDiv.style.display = 'none';
+        error.style.display = 'block';
         console.error(err);
-        respuestaDiv.innerText = "Error al obtener la respuesta.";
       }
     });
+
   </script>
 </body>
+
 </html>
