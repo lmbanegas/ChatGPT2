@@ -18,9 +18,9 @@ export async function chatHelper(message, model = "gpt-4o-mini", systemConfigura
         message,
       ],
 
-    
-    });
     messageHistory.push({role: "user", messages});
+
+    });
     messageHistory.push({role: "assistant", content: completion.choices[0].message.content});
     // Return a simplified object.
     console.log(messageHistory);
