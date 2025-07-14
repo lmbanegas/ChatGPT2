@@ -118,7 +118,7 @@
 
   <div id="loader" style="display: none;" class="loader"></div>
   <div id="error" style="display: none;">Error al realizar la consulta!</div>
-  <div id="Respuesta" style="display: none;">Respuesta</div>
+  <div id="Respuesta" id="respuesta" style="display: none;">Respuesta</div>
 
 
 
@@ -153,6 +153,8 @@
         });
 
         const data = await res.json();
+        respuestaDiv.style.display = 'none';
+        respuesta.style.display = 'block';
         respuesta.innerHTML = data.content;
 
       } catch (err) {
