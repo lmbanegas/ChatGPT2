@@ -26,12 +26,13 @@
       border: none;
       outline: none;
       border-bottom: 2px solid #AAA;
-      width: 100%;
       display: block;
+      width: 600px;
       padding: 10px;
       font-size: 14px;
       line-height: 16px;
       box-sizing: border-box;
+      margin-top: 30px;
 
     }
 
@@ -77,9 +78,10 @@
       background: white;
       padding: 20px;
       border-radius: 10px;
-      max-width: 600px;
+      width: 900px;
+    max-width: 600px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      white-space: pre-wrap;
+
     }
 
     .loader {
@@ -109,6 +111,16 @@
 
   <h2>Chat CGT</h2>
 
+
+
+
+  <div id="respuesta" style="display: none;"></div>
+
+<br><br>
+  <div id="loader" style="display: none;" class="loader"></div>
+  <div id="error" style="display: none;">Error al realizar la consulta!</div>
+
+
   <form id="chatForm">
 
     <div>
@@ -119,55 +131,70 @@
     </div>
   </form>
 
-  <div id="loader" style="display: none;" class="loader"></div>
-  <div id="error" style="display: none;">Error al realizar la consulta!</div>
-  <div id="respuesta" style="display: none;">Respuesta</div>
-
-
-
   <script>
-
-
     const textarea = document.querySelector('textarea');
-
-    textarea.addEventListener("input", e => {
+    let messageHistory = [];
+  
+    // Autoajustar altura del textarea
+    textarea.addEventListener("input", () => {
       textarea.style.height = '38px';
       textarea.style.height = (textarea.scrollHeight + 2) + 'px';
     });
-
-
-
+  
     document.getElementById('chatForm').addEventListener('submit', async function (e) {
       e.preventDefault();
-
-      const texto = document.getElementById('texto').value;
-      const respuestaDiv = document.getElementById('loader');
+  
+      const texto = document.getElementById('texto').value.trim();
+      const loader = document.getElementById('loader');
       const error = document.getElementById('error');
       const respuesta = document.getElementById('respuesta');
-
-
-
+  
+      if (!texto) return;
+  
+      // Agregar el mensaje del usuario al historial
+      messageHistory.push({ role: "user", content: texto });
+  
       try {
-        respuestaDiv.style.display = 'block';
+        loader.style.display = 'block';
+        error.style.display = 'none';
+  
         const res = await fetch('/sendText/enviar', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ texto2: texto })
+          body: JSON.stringify({
+            texto2: texto,
+            history: messageHistory
+          })
         });
-
+  
         const data = await res.json();
-        respuestaDiv.style.display = 'none';
+  
+        // Agregar respuesta del bot al historial
+        messageHistory.push({ role: "assistant", content: data.content });
+  
+        loader.style.display = 'none';
         respuesta.style.display = 'block';
-        respuesta.innerHTML = data.content;
-
+  
+        // Mostrar mensajes en pantalla
+        respuesta.innerHTML += `
+          <div><b>Lucas: ${texto} </b> </div>
+          <br>
+          <div><b>IA:</b> ${data.content}</div>
+          <hr>
+        `;
+  
+        // Limpiar textarea
+        document.getElementById('texto').value = '';
+        textarea.style.height = '38px';
+  
       } catch (err) {
-        respuestaDiv.style.display = 'none';
+        loader.style.display = 'none';
         error.style.display = 'block';
         console.error(err);
       }
     });
-
   </script>
+  
 </body>
 
 </html>

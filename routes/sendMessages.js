@@ -11,25 +11,21 @@ router.get("/", async (req, res) => {
 
 
 router.post("/enviar", async (req, res) => {
+  try {
+    const userInput = req.body.texto2;
+    const history = req.body.history || [];
 
-    try {
+    const result = await chatHelper(userInput, "gpt-4o-mini", undefined, history);
 
-      const userInput = req.body.texto2;
-      const message = { role: "user", content: userInput };
-      const result = await chatHelper(message);
+    result.content = marked(result.content);
+    res.json({ content: result.content });
 
-      result.content = marked(result.content);
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).json({ error: "Error processing request" });
+  }
+});
 
-        
-
-
-      res.json({ content: result.content });
-
-    } catch (error) {
-      console.error("Error processing request:", error);
-      res.status(500).json({ error: "Error processing request" });
-    }
-  });
 
 
   export default router;

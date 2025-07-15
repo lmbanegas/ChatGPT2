@@ -4,27 +4,26 @@ config();
 
 
 const openai = new OpenAI({
-    apiKey: process.env.apiKey,
+   apiKey: process.env.apiKey,
   });
-
-
-
-export async function chatHelper(message, model = "gpt-4o-mini", systemConfiguration = "You are a helpful assistant.", messageHistory = []) {
-        messageHistory.push({ role: "user", content: message });
-
+  
+  export async function chatHelper(messageText, model = "gpt-4o-mini", systemConfiguration = "You are a helpful assistant.", messageHistory = []) {
+    const userMessage = { role: "user", content: messageText };
+  
     const completion = await openai.chat.completions.create({
-      model: model,
+      model,
       messages: [
         { role: "system", content: systemConfiguration },
         ...messageHistory,
-        message,
+        userMessage,
       ],
-
     });
-    messageHistory.push({role: "assistant", content: completion.choices[0].message.content});
-    // Return a simplified object.
-    console.log(messageHistory);
-    return { role: "assistant", content: completion.choices[0].message.content };
+  
+    const assistantMessage = { role: "assistant", content: completion.choices[0].message.content };
+  
+    messageHistory.push(userMessage);
+    messageHistory.push(assistantMessage);
+  
+    return assistantMessage;
   }
-
-
+  
