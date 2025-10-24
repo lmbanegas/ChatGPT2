@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Rutas
-app.use('/sendText', sendMessages);
+app.use('/', sendMessages);
 
 // Inicio del servidor
 app.listen(port, () => {
