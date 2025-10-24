@@ -2,17 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
 import sendMessages from './routes/sendMessages.js';
-
-
 import ping from 'ping';
-
 
 // Configuración del entorno
 config();
 
-
-var hosts = ['192.1633338.1.1', 'google.com'];
-
+var hosts = ['192.168.1.1', 'google.com']; // Dirección IP corregida
 
 hosts.forEach(function (host) {
     ping.promise.probe(host, {
@@ -20,23 +15,10 @@ hosts.forEach(function (host) {
         extra: ['-i', '2'],
     }).then(function (res) {
         console.log(res);
+    }).catch(function (error) {
+        console.error(`Failed to ping ${host}:`, error);
     });
 });
-
-// Using http by default
-//ping('8.8.8.8', 80 /* optional */)
-//  .then(time => console.log(`Response time: ${time}ms`))
-//  .catch(() => console.log(`Failed to ping google.com`))
-
-//ping('8.8.8.8')
-//  .then(time => console.log(`Response time: ${time}ms`))
-//  .catch(() => console.log(`Failed to ping google.com`))
-
-// Or use https
-//ping('https://google.com')
-//  .then(time => console.log(`Response time: ${time}ms`))
-//  .catch(() => console.log('Failed to ping google.com'))
-
 
 // Inicialización de la aplicación
 const app = express();
