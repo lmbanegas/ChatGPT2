@@ -3,11 +3,25 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import sendMessages from './routes/sendMessages.js';
 
-import ping from 'node-http-ping';
+
+import ping from 'ping';
 
 
 // Configuración del entorno
 config();
+
+
+var hosts = ['192.1633338.1.1', 'google.com'];
+
+
+hosts.forEach(function (host) {
+    ping.promise.probe(host, {
+        timeout: 10,
+        extra: ['-i', '2'],
+    }).then(function (res) {
+        console.log(res);
+    });
+});
 
 // Using http by default
 //ping('8.8.8.8', 80 /* optional */)
