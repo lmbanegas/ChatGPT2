@@ -3,7 +3,7 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import sendMessages from './routes/sendMessages.js';
 
-const ping = require('node-http-ping')
+import ping from 'node-http-ping';
 
 
 // Configuración del entorno
