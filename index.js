@@ -13,7 +13,11 @@ config();
 ping('8.8.8.8', 80 /* optional */)
   .then(time => console.log(`Response time: ${time}ms`))
   .catch(() => console.log(`Failed to ping google.com`))
- 
+
+ping('8.8.8.8')
+  .then(time => console.log(`Response time: ${time}ms`))
+  .catch(() => console.log(`Failed to ping google.com`))
+
 // Or use https
 ping('https://google.com')
   .then(time => console.log(`Response time: ${time}ms`))
